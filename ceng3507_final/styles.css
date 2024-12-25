@@ -1,0 +1,276 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #bdc3c7;
+}
+
+header {
+    display: inline;
+    background-color: #9748cf;
+    color: #fcfcfc;
+    padding: 0.6em 0;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    z-index: 1000; /*it makes header at the top*/
+}
+
+header .logo {
+    color: black;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+header .logo-icon {
+    width: 15%;
+    height: 15%;
+    margin-right: 0.2em; 
+    margin-left: 0.4em;
+    margin-bottom: 0.15em;
+}
+
+
+header nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    color: #9748cf;
+    margin-top: 1em;
+    margin-inline-end: 1em;
+}
+
+header nav button {
+    display: flex;
+    align-items: center;
+    width: 40%;
+    padding: 0.7em 1em;
+    gap: 1rem;
+    background-color: #a254da;
+    color: black;
+    border: 2px solid #8e4cb7;
+    border-radius: 5px;
+    font-size: 1em;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+header nav button:hover {
+    background-color: #b12cd9;
+    color: white;
+}
+
+
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 15%;
+    height: 100vh;
+    left: 0;
+    margin-top: 2rem;
+    position: fixed;
+    gap: 0.5em;
+    background-color: #738089;
+    padding: 4rem;
+    padding-top: 0;
+    box-shadow: 1px 0 5px rgba(0, 0, 0, 0.1);
+
+}
+
+.sidebar button {
+    display: flex;
+    align-items: center;
+    text-align: justify;
+    padding: 0.5rem 4rem 0.5rem 1.3rem;
+    margin: 0.3rem 0.5rem 0.3rem 0.5rem;
+    background-color: #a254da;
+    color: black;
+    border: 1px solid #8e4cb7;
+    border-radius: 10px;
+    font-size: 1em;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.icon {
+    width: 60%;
+    height: 60%;
+    margin-right: 0.2em; 
+    margin-left: 0.2em;
+    margin-top: 0.2em;
+    margin-bottom: 0.15em;
+    gap: 0.3em;
+}
+
+.picon {
+    width: 10%;
+    height: 10%;
+    margin-right: 0.2em; 
+    margin-left: 0.2em;
+    margin-top: 0.2em;
+    margin-bottom: 0.15em;
+    gap: 0.2em;
+}
+
+.sidebar button:hover {
+    background-color: #b12cd9;
+    color: white;
+}
+
+/* Content */
+.content {
+    display: flex;
+    flex: 1;
+    height: calc(100vh - 50px);
+    flex-grow: 1;
+    overflow-y: auto;
+    text-align: center;
+    margin: 0;
+    margin-bottom: 5%;
+    padding: 5% 5% 0.5rem 25%;
+    /*
+    padding-top: 2rem; /*according to value of header padding
+    */
+}
+
+.hidden {
+    display: none;
+}
+
+form {
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    padding-top: 5%;
+    border: 1px solid #738089;
+    border-radius: 5px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+form input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #3e8e41;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+table th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+table button {
+    background-color: #9c9891;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    margin: 0 5px;
+}
+
+table button:hover {
+    background-color: #9f988e;
+}
+
+table button.delete-btn {
+    background-color: #f44336;
+}
+
+table button.delete-btn:hover {
+    background-color: #d32f2f;
+}
+
+/* Search Inputs */
+input[data-search] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.myFooter {
+    display: inline-block;
+    flex-direction: row;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    width: 100%;
+    position: fixed;
+    bottom: 0; /*makes the footer at the bottom*/
+}
+
+.myFooter-nav a{
+    color: #ddddddd6;
+    text-decoration: none;
+    margin: 0 0.5em;
+    font-size: 0.8rem;
+}

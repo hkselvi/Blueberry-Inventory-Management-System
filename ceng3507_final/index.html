@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>HKS Berries Inventory Management</title>
+        <link rel="stylesheet" href="styles.css">
+        <script src="script.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    </head>
+    <body>
+        <header>
+            <div class="logo">
+                <img src="icons\berries_logo.svg" alt="HKS Inventory Management Logo" class="logo-icon">
+                HKS INVENTORY MANAGEMENT<br>
+                Your goods are on the safe hands..
+            </div>
+            <nav>
+                <button data-section="farmersInfo"><img src="icons\farmer.svg" alt="farmer icon" class="logo-icon">Farmer Information</button>
+                <button data-section="warehouseInfo"><img src="icons\warehouse.svg" alt="warehouse icon" class="logo-icon">Warehouse Information</button>
+            </nav>
+        </header>
+
+        <!-- for left sidebar-->
+        <aside class="sidebar">
+            <button data-section="supplierRelations"><img src="icons\supplier.svg" alt="supplier icon" class="icon">Supplier Relations</button>
+            <button data-section="packaging"><img src="icons\package.svg" alt="package icon" class="icon">Product Packaging</button>
+            <button data-section="salesManagement" ><img src="icons\salesManagement.svg" alt="sales management icon" class="icon">Sales Management</button>
+            <button data-section="financialAnalysis"><img src="icons\financial.svg" alt="financial analysis icon" class="icon">Financial Analysis</button>
+            <button data-section="inventoryManagement" ><img src="icons\inventory.svg" alt="inventory management" class="icon">Inventory Management</button>
+            <button data-section="detailedReport"><img src="icons\detailedReport.svg" alt="detailed report icon" class="icon">Detailed Report</button>
+        </aside>
+
+           
+
+            <!--for main content which will be show on the page-->
+        <main class="content">
+            <section id="farmersInfo" class="hidden">
+                <div class="form-container">
+                    <h3>Add New Farmer</h3><br>
+                    <form id="farmerForm">
+                        <label for="farmerid">Farmer ID:</label>
+                        <input type="hidden" id="farmerid" data-field="id" placeholder="Enter farmer ID here.." min="1" required>
+                        <label for="farmerName">Farmer Name:</label>
+                        <input type="text" id="farmerName" data-field="name" placeholder="Enter farmer's name here.." required>
+                        <label for="farmerContact">Farmer Contact Phone Number:</label>
+                        <input type="text" id="farmerContact" data-field="contact" placeholder="Enter farmer's contact phone number here.." required>
+                        <label for="farmerLocation">Location:</label>
+                        <input type="text" id="farmerLocation" data-field="location" placeholder="Enter farmer location here.." required>
+                        <button type="submit">Add Farmer</button><br><br><br>
+                    </form>
+                </div>
+                <div class="table-container">
+                    <h3>Farmers List</h3><br>
+                    <input type="text" data-search="farmersInfo" placeholder="Search farmer.." /> <!-- do not forget the create search method for searching farmers by name or location-->
+                    <table id="farmerTable">
+                        <thead>
+                            <tr>
+                                <th>Farmer ID</th>
+                                <th>Name</th>
+                                <th>Contact Phone</th>
+                                <th>Location</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Farmers list will be shown here -->
+                        </tbody>
+                    </table><br><br><br>
+                    <button id="exportFarmersPDF">Export Farmers to PDF</button>
+                </div>
+            </section>
+            <section id="warehouseInfo" class="hidden">
+                <h2>Warehouse </h2><br>
+                <div class="warehouseStatistics">
+                    <div class="warehouseItem">
+                        <h3>Budget</h3><br><br>
+                        <span id="budgetDisplay" data-value="25000">$25,000.00</span>
+                    </div><br><br>
+                    <div class="warehouseItem">
+                        <h3>Leftover Blueberries (Kg)</h3><br><br>
+                        <span id="leftoverDisplay" data-value="0">0Kg</span>
+                    </div><br><br><br>
+                    <div class="warehouseItem">
+                        <h3>Packaged Products by Category</h3><br><br>
+                        <table id="packagedProductsTable">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Quantity</th>
+                                    <th>Total Weight (Kg)</th>
+                                    <th>Price Per Package ($)</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!--filled by js methods that retrieve datas from local storage-->
+                            </tbody>
+                        </table>
+                    </div><br><br>
+                </div>                
+            </section>
+            
+            <section id="supplierRelations" class="hidden">
+                <div class="form-container">
+                    <h2>Add New Purchase</h2>
+                    <form id="purchaseForm">
+                        <label for="purchaseId">Purchase ID:</label>
+                        <input type="hidden" id="purchaseId" placeholder="Enter purchase ID.." min="1" required>
+                        <label for="farmerIdDropdown">Farmer:</label>
+                        <select id="farmerIdDropdown" required>
+                            <option value="" disabled selected>Select a farmer..</option>
+                        </select>
+                        <label for="purchaseDate">Date of Purchase:</label>
+                        <input type="date" id="purchaseDate" required readonly> <!--this part will be shown but won't be change by user!!!-->
+                        <label for="quantity">Quantity (kg):</label>
+                        <input type="number" id="quantity" placeholder="Enter quantity.." min="1" step="0.01" required>
+                        <label for="pricePerKg">Price per kg ($):</label>
+                        <input type="number" id="pricePerKg" placeholder="Enter the price per kg.." min="0.01" step="0.01" required>
+                        <button type="submit">Add Purchase</button><br><br><br>
+                    </form>
+                </div>
+                <div class="table-container">
+                    <h2>Purchase Records</h2>
+                    <div class="sort-purchases">
+                        <label for="sortPurchases">Sort By:</label>
+                        <select id="sortPurchases">
+                            <option value="date">Date</option>
+                            <option value="farmer">Farmer Name</option>
+                            <option value="amount">Amount</option>
+                        </select>
+                    </div>
+                    <table id="purchaseTable">
+                        <thead>
+                            <tr>
+                                <th>Purchase ID</th>
+                                <th>Farmer Name</th>
+                                <th>Date</th>
+                                <th>Quantity (kg)</th>
+                                <th>Price per kg</th>
+                                <th>Total Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--there will be table information which retrive from storage-->
+                        </tbody>
+                    </table>
+                </div><br><br>
+                <div class="expenseCalculation"> 
+                    <h3>Expense Calculation</h3><br>
+                    <p>Select Time Period:</p>
+                    <input type="date" id="startDate"  placeholder="Start Date" required>
+                    <input type="date" id="endDate"  placeholder="End Date" required>
+                    <button id="calculateExpenses">Calculate Expenses</button><br><br>
+
+                    <h4>Total Cost of Raw Blueberries: <span id="totalExpenses">$0.00</span></h4><br>
+                    <button id="generateExpenseReport">Generate Expense Report</button>
+
+
+                </div>
+            </section>
+            
+            <section id="packaging" class="hidden">
+                <h2>Product Packaging</h2><br>
+                <form>
+                    <fieldset>
+                        <legend>Package Categories:</legend>
+                        <label><img src="icons/100gPackage.webp" alt="100g package" class="picon"><input type="radio" name="categories" value="small" required>Category 1: Small (100g) = 3.50$ </label><br>
+                        <label><img src="icons/250gPackage.webp" alt="250g package" class="picon"><input type="radio" name="categories" value="medium">Category 2: Medium (250g) = 9.50$ </label>
+                        <label><img src="icons/500gPackage.jpg" alt="500g package" class="picon"><input type="radio" name="categories" value="large">Category 3: Large (500g) = 18.00$</label>
+                        <label><img src="icons/1000gPackage.jpg" alt="1000g package" class="picon"><input type="radio" name="categories" value="extraLarge">Category 4: Extra Large (1000g) = 34.00$ </label>
+                        <label><img src="icons/2000gPackage.webp" alt="2000g package" class="picon"><input type="radio" name="categories" value="familyPack">Category 5: Family Pack (2000g) = 64.00$ </label>
+                        <label><img src="icons/5000gPackage.jpg" alt="5000g package" class="picon"><input type="radio" name="categories" value="bulkPack">Category 6: Bulk Pack (5000g) = 150.00$ </label>
+                        <label><img src="icons/premiumPackage.jpg" alt="premium package" class="picon"><input type="radio" name="categories" value="premium">Category 7: Premium = up to your wish...</label>
+                        <div id="premiumKgInputDiv" style="display:none;">
+                            <label for="premiumKg">Enter kg for Premium Package (more than 5kg):</label>
+                            <input type="number" id="premiumKg" name="premiumKg" value="5.1" placeholder="Enter kg..." min="5.1" step="0.01">
+                        </div>
+                    </fieldset><br>
+                    <label for="packageNumber">How many package do you want to create?</label>
+                    <input type="number" id="packageNumber" placeholder="Enter a number.." min="1" required>
+                    <button type="submit">Add Product</button>
+                </form>
+            </section>
+            
+            <section id="salesManagement" class="hidden">
+                <h2>Sales Management</h2><br><br><br>
+                <!-- new order -->
+                <div class="form-container">
+                    <h3>New Order</h3><br>
+                    <form id="newOrderForm">
+                        <label for="customerName">Customer Name:</label>
+                        <input type="text" id="customerName" placeholder="Enter customer's name" required>
+                        <label for="contact">Customer Contact:</label>
+                        <input type="text" id="contact" placeholder="Enter customer's contact" required>
+                        <label for="shippingAddress">Shipping Address:</label>
+                        <input type="text" id="shippingAddress" placeholder="Enter shipping address" required>
+                        <label for="productCategory">Product Category:</label>
+                        <select id="productCategory" required>
+                            <option value="" disabled selected>Select a category</option>
+                            <option value="small">Small (100g)</option>
+                            <option value="medium">Medium (250g)</option>
+                            <option value="large">Large (500g)</option>
+                            <option value="extraLarge">Extra Large (1000g)</option>
+                            <option value="familyPack">Family Pack (2000g)</option>
+                            <option value="bulkPack">Bulk Pack (5000g)</option>
+                            <option value="premium">Premium</option>
+                        </select>
+                        <label for="quantityOrdered">Quantity Ordered:</label>
+                        <input type="number" id="quantityOrdered" placeholder="Enter quantity" min="1" required>
+                        <label for="unitPrice">Price Per Unit ($):</label>
+                        <input type="number" id="unitPrice" placeholder="Enter price per unit" step="0.01" min="0.01" required>
+                        <button type="submit">Submit Order</button><br><br>
+
+                    </form>
+                </div><br><br>
+                <!-- order table -->
+                <div class="table-container">
+                    <h3>Order History</h3><br>
+                    <input type="text" data-search="searchOrder" placeholder="Search by customer name or product category or order status..">
+                    <table id="orderTable">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer Name</th>
+                                <th>Contact</th>
+                                <th>Shipping Address</th>
+                                <th>Product Category</th>
+                                <th>Quantity Ordered</th>
+                                <th>Total Price</th>
+                                <th>Order Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Orders will be displayed here -->
+                        </tbody>
+                    </table><br><br><br>
+                    <button id="exportOrdersPDF">Export Orders to PDF</button>
+                </div>
+            </section>
+            
+            <section id="financialAnalysis" class="hidden">
+                <h2>Financial Analysis</h2><br>
+                <div class="financial-summary">
+                    <h3>Summary</h3><br>
+                    <p>Total Income: <span id="totalIncome">$0.00</span></p>
+                    <p>Total Expenses: <span id="totalExpenses">$0.00</span></p>
+                    <p>Tax Applied: <span id="taxApplied">$0.00</span></p>
+                    <p>Net Profit: <span id="netProfit">$0.00</span></p>
+                </div><br><br>
+                <div class="report-generation">
+                    <h3>Generate Financial Report</h3>
+                    <button id="generateFinancialReport">Download Report as PDF</button>
+                </div>
+            </section>
+            
+            <section id="inventoryManagement" class="hidden">
+                <h2>Inventory Management</h2><br>
+                <div class="inventory-table-container">
+                    <h3>Current Stock Levels</h3>
+                    <table id="inventoryTable">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Quantity Available (Kg)</th>
+                                <th>Reorder Level (Kg)</th>
+                                <th>Restock Date</th>
+                                <th>Storage Location</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Inventory items will be dynamically populated here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="inventory-actions">
+                    <h3>Inventory Actions</h3>
+                    <form id="inventoryForm">
+                        <label for="productCategory">Category:</label>
+                        <select id="productCategory" required>
+                            <option value="" disabled selected>Select a category</option>
+                            <option value="small">Small (100g)</option>
+                            <option value="medium">Medium (250g)</option>
+                            <option value="large">Large (500g)</option>
+                            <option value="extraLarge">Extra Large (1000g)</option>
+                            <option value="familyPack">Family Pack (2000g)</option>
+                            <option value="bulkPack">Bulk Pack (5000g)</option>
+                            <option value="premium">Premium</option>
+                        </select>
+                        <label for="quantity">Quantity Available (Kg):</label>
+                        <input type="number" id="quantity" placeholder="Enter Quantity" min="0" required>
+                        <label for="reorderLevel">Reorder Level (Kg):</label>
+                        <input type="number" id="reorderLevel" placeholder="Minimum Quantity" min="0" required>
+                        <label for="restockDate">Restock Date:</label>
+                        <input type="date" id="restockDate">
+                        <label for="storageLocation">Storage Location:</label>
+                        <input type="text" id="storageLocation" placeholder="Warehouse Section / Bin">
+                        <button type="submit">Add / Update Item</button>
+                    </form>
+                </div>
+                <div class="inventory-report">
+                    <h3>Generate Inventory Report</h3>
+                    <button id="generateInventoryReport">Export Inventory Report as PDF</button>
+                </div>  
+            </section>
+            
+            <section id="detailedReport" class="hidden">
+                <h2>Detailed Report</h2><br><br><br>
+                <h3>Detailed reports for inventory, sales, and financial analysis.</h3><br>
+                <button id="exportDetailedReport">Export Detailed Report as PDF</button>
+            </section>
+        </main>
+
+        <footer class="myFooter">
+            <p>&copy; 2024 HKS Inventory Management System. All rights reserved.</p>
+            <nav class="myFooter-nav">  
+                <!--Blank links for the footer part-->
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Contact with Us</a> 
+            </nav>
+        </footer>
+    </body>
+</html>
